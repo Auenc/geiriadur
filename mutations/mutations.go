@@ -27,6 +27,12 @@ func Mutate(word string) (*Mutations, error) {
 	}
 	m.HProthesis = hProthesis
 
+	softMutation, err := softMutate(word)
+	if err != nil {
+		return nil, err
+	}
+	m.Soft = softMutation
+
 	if m.Aspirate == "" && m.HProthesis == "" && m.Nasal == "" && m.Soft == "" {
 		return nil, nil
 	}

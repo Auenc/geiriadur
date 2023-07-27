@@ -13,39 +13,30 @@ func TestMutate(t *testing.T) {
 		expectedError error
 	}
 
-	ysgol := "ysgol"
-
 	tests := []test{
 		{
-			input: ysgol,
+			input: "ysgol",
 			want: &Mutations{
 				Word:       "ysgol",
-				HProthesis: Mutation("h" + ysgol),
+				HProthesis: Mutation("h" + "ysgol"),
 			},
 		},
 		{
 			input: "chwarae",
 			want:  nil,
 		},
+		{
+			input: "mynd",
+			want: &Mutations{
+				Word: "mynd",
+				Soft: Mutation("fynd"),
+			},
+		},
 	}
 
-	for i, tt := range tests {
+	for _, tt := range tests {
 		result, err := Mutate(tt.input)
-		if err != tt.expectedError {
-			t.Fatalf("test[%d] - expected error was not '%s'. Got got '%s'", i, tt.expectedError.Error(), err.Error())
-			return
-		}
-
-		if result == nil && tt.want != nil {
-			t.Fatalf("test[%d] - result is nil but the desired mutation is not", i)
-			return
-		}
-
-		if result != nil && tt.want == nil {
-			t.Fatalf("test[%d] - result is not nil but the desired mutation is nil", i)
-			return
-		}
-
+		assert.Equal(t, err, tt.expectedError)
 		assert.Equal(t, tt.want, result)
 	}
 }

@@ -23,19 +23,29 @@ func TestMutate(t *testing.T) {
 				HProthesis: Mutation("h" + ysgol),
 			},
 		},
+		{
+			input: "chwarae",
+			want:  nil,
+		},
 	}
 
 	for i, tt := range tests {
 		result, err := Mutate(tt.input)
 		if err != tt.expectedError {
 			t.Fatalf("test[%d] - expected error was not '%s'. Got got '%s'", i, tt.expectedError.Error(), err.Error())
+			return
 		}
 
 		if result == nil && tt.want != nil {
 			t.Fatalf("test[%d] - result is nil but the desired mutation is not", i)
+			return
 		}
 
-		// TODO check the result
-		assert.EqualExportedValues(t, *tt.want, *result)
+		if result != nil && tt.want == nil {
+			t.Fatalf("test[%d] - result is not nil but the desired mutation is nil", i)
+			return
+		}
+
+		assert.Equal(t, tt.want, result)
 	}
 }

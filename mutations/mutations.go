@@ -3,7 +3,7 @@ package mutations
 import (
 	"errors"
 
-	"github.com/auenc/geiriadur/vowels"
+	"github.com/auenc/geiriadur/alphabet"
 )
 
 type Mutation string
@@ -21,20 +21,31 @@ func Mutate(word string) (*Mutations, error) {
 	}
 	m := Mutations{Word: word}
 
-	m.HProthesis = hProthesisMutate(word)
+	hProthesis, err := hProthesisMutate(word)
+	if err != nil {
+		return nil, err
+	}
+	m.HProthesis = hProthesis
+
+	if m.Aspirate == "" && m.HProthesis == "" && m.Nasal == "" && m.Soft == "" {
+		return nil, nil
+	}
 
 	return &m, nil
 }
 
-func hProthesisMutate(word string) Mutation {
+func hProthesisMutate(word string) (Mutation, error) {
 	if word == "" {
-		return ""
+		return "", errors.New("cannot mutate an empty string")
 	}
 
-	firstLetter := word[0]
-	if vowels.IsVowel(rune(firstLetter)) {
-		return Mutation("h" + word)
+	firstLetter, err := alphabet.GetFirstLetter(word)
+	if err != nil {
+		return "", err
+	}
+	if alphabet.IsVowel(firstLetter) {
+		return Mutation("h" + word), nil
 	}
 
-	return ""
+	return "", nil
 }

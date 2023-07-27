@@ -40,6 +40,15 @@ func TestMutate(t *testing.T) {
 				Nasal: Mutation("mangor"),
 			},
 		},
+		{
+			input: "caerdydd",
+			want: &Mutations{
+				Word:     "caerdydd",
+				Soft:     Mutation("gaerdydd"),
+				Nasal:    Mutation("nghaerdydd"),
+				Aspirate: Mutation("chaerdydd"),
+			},
+		},
 	}
 
 	for _, tt := range tests {

@@ -1,0 +1,45 @@
+package mutations
+
+import (
+	"errors"
+	"strings"
+
+	"github.com/auenc/geiriadur/alphabet"
+)
+
+var AspirateMutationLetters = map[string]string{
+	"p": "ph",
+	"t": "th",
+	"c": "ch",
+}
+
+func canAspirateMutate(firstLetter string) bool {
+	for original := range AspirateMutationLetters {
+		if original == firstLetter {
+			return true
+		}
+	}
+	return false
+}
+
+func aspirateMutate(word string) (Mutation, error) {
+	if word == "" {
+		return "", errors.New("cannot mutate an empty string")
+	}
+
+	firstLetter, err := alphabet.GetFirstLetter(word)
+	if err != nil {
+		return "", err
+	}
+
+	canMutate := canAspirateMutate(firstLetter)
+
+	if !canMutate {
+		return "", nil
+	}
+
+	newLetter := AspirateMutationLetters[firstLetter]
+	newWord := strings.Replace(word, firstLetter, newLetter, 1)
+
+	return Mutation(newWord), nil
+}

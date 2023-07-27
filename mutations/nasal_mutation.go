@@ -7,7 +7,7 @@ import (
 	"github.com/auenc/geiriadur/alphabet"
 )
 
-var NasalMurationLetters = map[string]string{
+var NasalMutationLetters = map[string]string{
 	"p": "mh",
 	"t": "nh",
 	"c": "ngh",
@@ -17,7 +17,7 @@ var NasalMurationLetters = map[string]string{
 }
 
 func canNasalMutate(firstLetter string) bool {
-	for original := range NasalMurationLetters {
+	for original := range NasalMutationLetters {
 		if original == firstLetter {
 			return true
 		}
@@ -40,7 +40,7 @@ func nasalMutate(word string) (Mutation, error) {
 		return "", nil
 	}
 
-	newLetter := NasalMurationLetters[firstLetter]
+	newLetter := NasalMutationLetters[firstLetter]
 	newWord := strings.Replace(word, firstLetter, newLetter, 1)
 
 	return Mutation(newWord), nil

@@ -20,7 +20,7 @@ var SoftMutationLetters = map[string]string{
 }
 
 func canSoftMutate(firstLetter string) bool {
-	for original, _ := range SoftMutationLetters {
+	for original := range SoftMutationLetters {
 		if original == firstLetter {
 			return true
 		}

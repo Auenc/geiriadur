@@ -2,8 +2,7 @@ package mutations
 
 import (
 	"errors"
-
-	"github.com/auenc/geiriadur/alphabet"
+	"fmt"
 )
 
 type Mutation string
@@ -45,25 +44,21 @@ func Mutate(word string) (*Mutations, error) {
 	}
 	m.Aspirate = aspirateMutation
 
-	if m.Aspirate == "" && m.HProthesis == "" && m.Nasal == "" && m.Soft == "" {
-		return nil, nil
-	}
-
 	return &m, nil
 }
 
-func hProthesisMutate(word string) (Mutation, error) {
-	if word == "" {
-		return "", errors.New("cannot mutate an empty string")
+func MutationLettersAsTuples(mutation string) ([][]string, error) {
+	var tuples [][]string
+	switch mutation {
+	case "soft":
+		tuples = softLettersToSortedTupleArray()
+	case "nasal":
+		tuples = nasalLettersToSortedTupleArray()
+	case "aspirate":
+		tuples = aspirateLettersToSortedTupleArray()
+	default:
+		return tuples, fmt.Errorf("unknown mutation type %s", mutation)
 	}
 
-	firstLetter, err := alphabet.GetFirstLetter(word)
-	if err != nil {
-		return "", err
-	}
-	if alphabet.IsVowel(firstLetter) {
-		return Mutation("h" + word), nil
-	}
-
-	return "", nil
+	return tuples, nil
 }

@@ -1,6 +1,6 @@
 package alphabet
 
-var vowels = []string{
+var Vowels = []string{
 	"a",
 	"e",
 	"i",
@@ -11,7 +11,7 @@ var vowels = []string{
 }
 
 func IsVowel(toCheck string) bool {
-	for _, vowel := range vowels {
+	for _, vowel := range Vowels {
 		if toCheck == vowel {
 			return true
 		}

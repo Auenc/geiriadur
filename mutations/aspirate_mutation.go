@@ -2,9 +2,11 @@ package mutations
 
 import (
 	"errors"
+	"sort"
 	"strings"
 
 	"github.com/auenc/geiriadur/alphabet"
+	"golang.org/x/exp/maps"
 )
 
 var AspirateMutationLetters = map[string]string{
@@ -42,4 +44,14 @@ func aspirateMutate(word string) (Mutation, error) {
 	newWord := strings.Replace(word, firstLetter, newLetter, 1)
 
 	return Mutation(newWord), nil
+}
+
+func aspirateLettersToSortedTupleArray() [][]string {
+	mutationLetters := [][]string{}
+	keys := maps.Keys(AspirateMutationLetters)
+	sort.Strings(keys)
+	for _, letter := range keys {
+		mutationLetters = append(mutationLetters, []string{letter, NasalMutationLetters[letter]})
+	}
+	return mutationLetters
 }

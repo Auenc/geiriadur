@@ -1,7 +1,7 @@
 package main
 
-import "github.com/auenc/geiriadur/cmd/geiriadur"
+import "github.com/auenc/geiriadur/cmd"
 
 func main() {
-	geiriadur.Execute()
+	cmd.Execute()
 }

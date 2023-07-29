@@ -2,9 +2,11 @@ package mutations
 
 import (
 	"errors"
+	"sort"
 	"strings"
 
 	"github.com/auenc/geiriadur/alphabet"
+	"golang.org/x/exp/maps"
 )
 
 var SoftMutationLetters = map[string]string{
@@ -47,4 +49,14 @@ func softMutate(word string) (Mutation, error) {
 	newWord := strings.Replace(word, firstLetter, newLetter, 1)
 
 	return Mutation(newWord), nil
+}
+
+func softLettersToSortedTupleArray() [][]string {
+	mutationLetters := [][]string{}
+	keys := maps.Keys(SoftMutationLetters)
+	sort.Strings(keys)
+	for _, letter := range keys {
+		mutationLetters = append(mutationLetters, []string{letter, SoftMutationLetters[letter]})
+	}
+	return mutationLetters
 }

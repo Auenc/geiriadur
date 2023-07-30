@@ -3,6 +3,10 @@ package mutations
 import (
 	"errors"
 	"fmt"
+	"sort"
+
+	"github.com/auenc/geiriadur/util"
+	"golang.org/x/exp/maps"
 )
 
 type Mutation string
@@ -47,18 +51,44 @@ func Mutate(word string) (*Mutations, error) {
 	return &m, nil
 }
 
-func MutationLettersAsTuples(mutation string) ([][]string, error) {
-	var tuples [][]string
+func MutationLettersAsFlatArray(mutation string) ([][]string, error) {
+	var flat [][]string
 	switch mutation {
 	case "soft":
-		tuples = softLettersToSortedTupleArray()
+		flat = softLettersToSortedTupleArray()
 	case "nasal":
-		tuples = nasalLettersToSortedTupleArray()
+		flat = nasalLettersToSortedTupleArray()
 	case "aspirate":
-		tuples = aspirateLettersToSortedTupleArray()
+		flat = aspirateLettersToSortedTupleArray()
+	case "all":
+		flat = collatedMapToFlatArray()
 	default:
-		return tuples, fmt.Errorf("unknown mutation type %s", mutation)
+		return flat, fmt.Errorf("unknown mutation type %s", mutation)
 	}
 
-	return tuples, nil
+	return flat, nil
+}
+
+func collatedMapToFlatArray() [][]string {
+	collated := CollatedMutationMap()
+	mutationLetters := [][]string{}
+	keys := maps.Keys(collated)
+	sort.Strings(keys)
+	for _, letter := range keys {
+		letterMutations := []string{letter}
+		letterMutations = append(letterMutations, collated[letter]...)
+		mutationLetters = append(mutationLetters, letterMutations)
+	}
+
+	return mutationLetters
+}
+
+func CollatedMutationMap() map[string][]string {
+	collated := map[string][]string{}
+
+	util.AppendMap(collated, SoftMutationLetters)
+	util.AppendMap(collated, NasalMutationLetters)
+	util.AppendMap(collated, AspirateMutationLetters)
+
+	return collated
 }

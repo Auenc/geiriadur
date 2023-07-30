@@ -19,13 +19,16 @@ var listLettersCmd = &cobra.Command{
 		mutation := args[0]
 		var headers []string
 
-		mutationLetters, err := mutations.MutationLettersAsTuples(mutation)
+		mutationLetters, err := mutations.MutationLettersAsFlatArray(mutation)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "error loading mutation letters '%s'", err)
+			fmt.Fprintf(os.Stderr, "error loading mutation letters '%s'\n", err)
 			os.Exit(1)
 		}
 
 		headers = []string{"no mutation", mutation}
+		if mutation == "all" {
+			headers = []string{"no mutation", "soft", "nasal", "aspirate"}
+		}
 
 		table := tablewriter.NewWriter(os.Stdout)
 		table.SetHeader(headers)

@@ -14,7 +14,7 @@ var listLettersCmd = &cobra.Command{
 	Aliases:   []string{"lsl"},
 	Short:     "lists the letters of the provided mutation",
 	Args:      cobra.OnlyValidArgs,
-	ValidArgs: []string{"all", "soft", "nasal", "aspirate", "h-prothesis"},
+	ValidArgs: []string{"all", "soft", "nasal", "aspirate"},
 	Run: func(cmd *cobra.Command, args []string) {
 		mutation := args[0]
 		var headers []string
